@@ -10,7 +10,7 @@
 <meta name="ROBOTS" content="index,follow,archive" /> 
 <meta http-equiv="imagetoolbar" content="false" /> 
 <meta name="MSSmartTagsPreventParsing" content="true" /> 
-<meta name="author" content="Sharpitor" /> 
+<meta name="author" content="Nick Braun" /> 
 <meta name="Rating" content="General" /> 
 <meta name="revisit-after" content="7 Days" /> 
 <meta name="doc-class" content="Living Document" /> 
@@ -41,29 +41,93 @@
 			<h2>About</h2> 
 			<p> 
 Sharpitor Gardens is a library extension for the programming language <a href="http://www.processing.org" target="_blank">Processing</a>.
-It provides a  lightweight framework for creating and navigating around garden-like environments.
+It provides a lightweight framework for infinite-extent world creation and navigation.
 	
 <h2>Features</h2> 
 <li>frozen capillary wave approach to infinite terrain generation</li> 
 <li>fixed spatial density maintenance of plant/animal species</li> 
 <li>first person navigation perspective with obstacle handling</li> 
 <li>machinima-style recording/playback</li> 
-<li>L-system species</li> 
+<li>L-system species (algorithmically generated trees)</li> 
 <p> 
- 
 <h2>Tested</h2> 
 			<p> 
-			<!-- on which platform has the library been tested? --> 
 			<strong>Platform</strong> Ubuntu (Linux)
 			
-			<!-- which processing version did you use for testing your library? --> 
 			<br /><strong>Processing</strong> 1.0.1
 			
-			<!-- does your library depend on any other library or framework? --> 
 			<br /><strong>Dependencies</strong> 
 			Processing core
  
-			<p>(c) 2010-11 Nick Braun; Last update: Feb  2011. 
+			
+
+<h2>Example</h2> 
+
+If java applets are enabled in your browser, click <a href="finnmark/index.html" target="_blank">here</a> to run
+<p>
+<pre>
+
+/***************************************************************************
+
+    Sharpitor Gardens Demo -
+	
+    	creates a North Norwegian landscape with a joystick for navigation  
+
+****************************************************************************/
+
+import com.sharpitor.tellus.*;		     // base class package for unpopulated world comprising terrain, lakes, sky
+import com.sharpitor.tellus.tellurians.*;    // class package for adding actor/obstacle populations to the world (plants, animals)
+import com.sharpitor.tellus.lindemayer.*;    // subclass package for L-system tellurians (trees)
+
+import com.sharpitor.dashboard.*;	    // class package for interactive navigation dashboard
+
+// ---------------------------------------------------
+
+Tellus theWorld;   		// parent world instance to which we will add terrain, sky and trees
+Dashboard theDashboard;		// dashboard instance for navigation
+
+boolean playback=false;		// make the world interactive
+
+public void setup() {		// initialization
+  size(400, 300);  
+  frameRate(30);  
+  
+  theWorld = new Tellus(this,playback); 	      // create the world; empty by default
+  
+  theWorld.createTerrain(20,180,color(200,160,140));  // parameters specify steepness, colour variation 
+  theWorld.createSky(color(230,250,255),600); 	      // parameters specify colour, horizon offset 
+  theWorld.createForest(5,1); 			      // sparsely populate with trees; 
+						      // parameters specify population density, tree type 
+ 
+  
+  theDashboard = new Dashboard(this); 		// create dashboard; empty by default
+  theDashboard.addJoystick(330,240,0.8); 	// parameters specify position and size on the dashboard
+  theDashboard.addCompass(250,240,0.8);
+  theWorld.interfaceWith(theDashboard);		// connect world view response to the dashboard controls
+
+}
+
+public void draw() {		// interactive animation/navigation loop
+
+ theDashboard.update();
+ theWorld.update();
+ 
+ theWorld.draw();
+ theDashboard.draw();
+}
+
+// event handlers
+
+public void mousePressed(){
+  theDashboard.mousePressed();
+}
+
+public void mouseReleased(){
+ theDashboard.mouseReleased();  
+}
+<p>
+</pre>
+<p>(c) 2010-11 Nick Braun; Last update: Feb  2011. 
 		</div> 
  
 </body> 

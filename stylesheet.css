@@ -166,12 +166,12 @@ body {
 
 
 h1, h2, h3, h4, h5, h6 {
-	color:#666;
+	color:#777;
 }
 
 
-pre, code {  
-	color: #000000;
+pre, code {  width:950px;
+	background-color: #c7dbbb;
 }
 
 
